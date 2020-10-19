@@ -1,188 +1,154 @@
 import tkinter as tk
-
-global_vertices = {
-    'v1': (-2, 22), 
-    'v20': (-2, 3), 
-    'v2': (3, 22), 
-    'v21': (0, 3), 
-    'v3': (5, 22), 
-    'v22': (4, 3), 
-    'v4': (10, 22), 
-    'v23': (8, 3), 
-    'v5': (4, 20), 
-    'v24': (10, 3), 
-    'v6': (-2, 18), 
-    'v25': (0, 0), 
-    'v7': (3, 18), 
-    'v26': (8, 0), 
-    'v8': (5, 18), 
-    'v27': (4, -1), 
-    'v9': (10, 18), 
-    'v28': (2, -2), 
-    'v10': (4, 16), 
-    'v29': (6, -2), 
-    'v11': (3, 14), 
-    'v30': (4, 20), 
-    'v12': (5, 14), 
-    'v31': (4, 16), 
-    'v13': (0, 12), 
-    'v32': (4, 12), 
-    'v14': (4, 12), 
-    'v33': (0, 8), 
-    'v15': (8, 12), 
-    'v34': (8, 8), 
-    'v16': (-2, 8), 
-    'v35': (0, 3), 
-    'v17': (0, 8), 
-    'v36': (4, 3), 
-    'v18': (8, 8), 
-    'v37': (8, 3), 
-    'v19': (10, 8), 
-    'v38': (4, -1),
-}
-
-global_faces = {
-    'f1': ('v1','v2','v7'), 
-    'f25': ('v18','v23','v22'), 
-    'f49': ('v12','v32','v15'), 
-    'f2': ('v2','v3','v5'), 
-    'f26': ('v18','v24','v23'), 
-    'f50': ('v12','v11','v32'), 
-    'f3': ('v2','v5','v7'), 
-    'f27': ('v18','v19','v24'), 
-    'f51': ('v11','v13','v32'), 
-    'f4': ('v3','v8','v5'), 
-    'f28': ('v20','v21','v25'), 
-    'f52': ('v15','v34','v19'), 
-    'f5': ('v5','v8','v7'), 
-    'f29': ('v21','v22','v25'), 
-    'f53': ('v15','v32','v18'), 
-    'f6': ('v3','v4','v8'), 
-    'f30': ('v22','v26','v25'), 
-    'f54': ('v32','v33','v34'), 
-    'f7': ('v6','v7','v11'),
-    'f31': ('v22','v23','v26'), 
-    'f55': ('v32','v13','v33'), 
-    'f8': ('v7','v10','v11'), 
-    'f32': ('v23','v24','v26'), 
-    'f56': ('v13','v16','v32'), 
-    'f9': ('v7','v8','v10'), 
-    'f33': ('v25','v27','v28'), 
-    'f57': ('v19','v34','v24'), 
-    'f10': ('v8','v12','v10'), 
-    'f34': ('v25','v26','v27'), 
-    'f58': ('v34','v23','v24'), 
-    'f11': ('v10','v12','v11'), 
-    'f35': ('v26','v29','v27'), 
-    'f59': ('v34','v22','v23'), 
-    'f12': ('v8','v9','v12'), 
-    'f36': ('v27','v28','v29'), 
-    'f60': ('v34','v33','v36'), 
-    'f13': ('v11','v12','v14'), 
-    'f37': ('v4','v3','v8'), 
-    'f61': ('v33','v35','v36'), 
-    'f14': ('v13','v11','v14'), 
-    'f38': ('v3','v30','v8'), 
-    'f62': ('v33','v20','v35'), 
-    'f15': ('v12','v15','v14'), 
-    'f39': ('v3','v2','v30'), 
-    'f63': ('v33','v16','v20'), 
-    'f16': ('v13','v17','v16'), 
-    'f40': ('v2','v7','v30'), 
-    'f65': ('v24','v37','v26'), 
-    'f17': ('v13','v14','v17'), 
-    'f41': ('v2','v1','v7'), 
-    'f65': ('v37','v36','v26'), 
-    'f18': ('v14','v18','v17'), 
-    'f42': ('v30','v7','v8'), 
-    'f66': ('v36','v25','v26'), 
-    'f19': ('v14','v15','v18'), 
-    'f43': ('v9','v8','v12'), 
-    'f67': ('v36','v35','v25'), 
-    'f20': ('v15','v19','v18'), 
-    'f44': ('v8','v31','v12'), 
-    'f68': ('v35','v20','v25'), 
-    'f21': ('v16','v17','v20'), 
-    'f45': ('v8','v7','v31'), 
-    'f69': ('v26','v38','v29'), 
-    'f22': ('v17','v21','v20'), 
-    'f46': ('v7','v11','v31'), 
-    'f70': ('v26','v25','v38'), 
-    'f23': ('v17','v22','v21'), 
-    'f47': ('v7','v6','v11'), 
-    'f71': ('v25','v28','v38'), 
-    'f24': ('v17','v18','v22'), 
-    'f48': ('v31','v11','v12'), 
-    'f72': ('v38','v28','v29'),
-}
+import sys
 
 class Designer:
-    def __init__(self, root, vertices, faces):
+    def __init__(self, root, vertices, faces, width=1000, height=800):
         self.vertices = vertices
         self.faces = faces
-        self.canvasWidth = 50
-        self.canvasHeight = 500 - 50
-        self.canvas = tk.Canvas(root,  width = 500, height = 500)      
+        self.canvasWidth = width/2
+        self.canvasHeight = height/2
+        self.canvas = tk.Canvas(root,  width = width, height = height)
+        self.canvas.config(scrollregion=self.canvas.bbox(tk.ALL))
         
     
-    def draw_form(self, vertices):
+    def draw_form(self, vertices, color):
+        coords = [[]]
         for i in range(0, len(vertices)):
-            if i != len(vertices) - 1:
-                j = i + 1
-            else: 
-                j = 0    
-            self.canvas.create_line(self.vertices[vertices[i]][0]*15 + self.canvasWidth, self.canvasHeight - self.vertices[vertices[i]][1]*15, self.canvasWidth + self.vertices[vertices[j]][0]*15, self.canvasHeight - self.vertices[vertices[j]][1]*15, width = 3)
+            multiplier = 15
+            x = self.canvasWidth + self.vertices[vertices[i]][0]*multiplier
+            y = self.canvasHeight - self.vertices[vertices[i]][1]*multiplier
+            coords.append([x, y])
         
-        self.canvas.pack()
-
-
-        # x_values = []
-        # y_values = []
-        
-        # x_values.append(self.vertices[vertices[0]][0])
-        # y_values.append(self.vertices[vertices[0]][1])
-
-        # x_values.append(self.vertices[vertices[1]][0])
-        # y_values.append(self.vertices[vertices[1]][1])
-
-        # plt.plot(x_values, y_values, marker = '.')
-
-        # x_values = []
-        # y_values = []
-
-        # x_values.append(self.vertices[vertices[1]][0])
-        # y_values.append(self.vertices[vertices[1]][1])
-
-        # x_values.append(self.vertices[vertices[2]][0])
-        # y_values.append(self.vertices[vertices[2]][1])
-
-        # plt.plot(x_values, y_values, marker = '.')
-
-        # x_values = []
-        # y_values = []
-
-        # x_values.append(self.vertices[vertices[2]][0])
-        # y_values.append(self.vertices[vertices[2]][1])
-
-        # x_values.append(self.vertices[vertices[0]][0])
-        # y_values.append(self.vertices[vertices[0]][1])
-
-        # plt.plot(x_values, y_values, marker = '.')
+        self.canvas.create_polygon(coords, fill=color, outline="#fb0")
+        self.canvas.pack(fill=tk.BOTH)
 
     def draw(self): 
         for f, v in self.faces.items():
             print(f"drawing face {f} with vertices {v}")
-            self.draw_form(v)
-        # plt.plot([1, 1], [2, 5], marker = 'o')    
-        # plt.show()    
-    
+            self.draw_form(v[0], v[1])
+
+def parse_csv(path):
+    vertices = {
+        'v1': (-2, 22, 1), 
+        'v20': (-2, 3, 1), 
+        'v2': (3, 22, 1), 
+        'v21': (0, 3, 1), 
+        'v3': (5, 22, 1), 
+        'v22': (4, 3, 1), 
+        'v4': (10, 22, 1), 
+        'v23': (8, 3, 1), 
+        'v5': (4, 20, 1), 
+        'v24': (10, 3, 1), 
+        'v6': (-2, 18, 1), 
+        'v25': (0, 0, 1), 
+        'v7': (3, 18, 1), 
+        'v26': (8, 0, 1), 
+        'v8': (5, 18, 1), 
+        'v27': (4, -1, 1), 
+        'v9': (10, 18, 1), 
+        'v28': (2, -2, 1), 
+        'v10': (4, 16, 1), 
+        'v29': (6, -2, 1), 
+        'v11': (3, 14, 1), 
+        'v30': (4, 20, 1), 
+        'v12': (5, 14, 1), 
+        'v31': (4, 16, 1), 
+        'v13': (0, 12, 1), 
+        'v32': (4, 12, 1), 
+        'v14': (4, 12, 1), 
+        'v33': (0, 8, 1), 
+        'v15': (8, 12, 1), 
+        'v34': (8, 8, 1), 
+        'v16': (-2, 8, 1), 
+        'v35': (0, 3, 1), 
+        'v17': (0, 8, 1), 
+        'v36': (4, 3, 1), 
+        'v18': (8, 8, 1), 
+        'v37': (8, 3, 1), 
+        'v19': (10, 8, 1), 
+        'v38': (4, -1, 1),
+    }
+    faces = {
+        'f1': (['v1','v2','v7'], "#f50"), 
+        'f25': (['v18','v23','v22'], "#f50"), 
+        'f49': (['v12','v32','v15'], "#f50"), 
+        'f2': (['v2','v3','v5'], "#f50"), 
+        'f26': (['v18','v24','v23'], "#f50"), 
+        'f50': (['v12','v11','v32'], "#f50"), 
+        'f3': (['v2','v5','v7'], "#f50"), 
+        'f27': (['v18','v19','v24'], "#f50"), 
+        'f51': (['v11','v13','v32'], "#f50"), 
+        'f4': (['v3','v8','v5'], "#f50"), 
+        'f28': (['v20','v21','v25'], "#f50"), 
+        'f52': (['v15','v34','v19'], "#f50"), 
+        'f5': (['v5','v8','v7'], "#f50"), 
+        'f29': (['v21','v22','v25'], "#f50"), 
+        'f53': (['v15','v32','v18'], "#f50"), 
+        'f6': (['v3','v4','v8'], "#f50"), 
+        'f30': (['v22','v26','v25'], "#f50"), 
+        'f54': (['v32','v33','v34'], "#f50"), 
+        'f7': (['v6','v7','v11'], "#f50"),
+        'f31': (['v22','v23','v26'], "#f50"), 
+        'f55': (['v32','v13','v33'], "#f50"), 
+        'f8': (['v7','v10','v11'], "#f50"), 
+        'f32': (['v23','v24','v26'], "#f50"), 
+        'f56': (['v13','v16','v32'], "#f50"), 
+        'f9': (['v7','v8','v10'], "#f50"), 
+        'f33': (['v25','v27','v28'], "#f50"), 
+        'f57': (['v19','v34','v24'], "#f50"), 
+        'f10': (['v8','v12','v10'], "#f50"), 
+        'f34': (['v25','v26','v27'], "#f50"), 
+        'f58': (['v34','v23','v24'], "#f50"), 
+        'f11': (['v10','v12','v11'], "#f50"), 
+        'f35': (['v26','v29','v27'], "#f50"), 
+        'f59': (['v34','v22','v23'], "#f50"), 
+        'f12': (['v8','v9','v12'], "#f50"), 
+        'f36': (['v27','v28','v29'], "#f50"), 
+        'f60': (['v34','v33','v36'], "#f50"), 
+        'f13': (['v11','v12','v14'], "#f50"), 
+        'f37': (['v4','v3','v8'], "#f50"), 
+        'f61': (['v33','v35','v36'], "#f50"), 
+        'f14': (['v13','v11','v14'], "#f50"), 
+        'f38': (['v3','v30','v8'], "#f50"), 
+        'f62': (['v33','v20','v35'], "#f50"), 
+        'f15': (['v12','v15','v14'], "#f50"), 
+        'f39': (['v3','v2','v30'], "#f50"), 
+        'f63': (['v33','v16','v20'], "#f50"), 
+        'f16': (['v13','v17','v16'], "#f50"), 
+        'f40': (['v2','v7','v30'], "#f50"), 
+        'f65': (['v24','v37','v26'], "#f50"), 
+        'f17': (['v13','v14','v17'], "#f50"), 
+        'f41': (['v2','v1','v7'], "#f50"), 
+        'f65': (['v37','v36','v26'], "#f50"), 
+        'f18': (['v14','v18','v17'], "#f50"), 
+        'f42': (['v30','v7','v8'], "#f50"), 
+        'f66': (['v36','v25','v26'], "#f50"), 
+        'f19': (['v14','v15','v18'], "#f50"), 
+        'f43': (['v9','v8','v12'], "#f50"), 
+        'f67': (['v36','v35','v25'], "#f50"), 
+        'f20': (['v15','v19','v18'], "#f50"), 
+        'f44': (['v8','v31','v12'], "#f50"), 
+        'f68': (['v35','v20','v25'], "#f50"), 
+        'f21': (['v16','v17','v20'], "#f50"), 
+        'f45': (['v8','v7','v31'], "#f50"), 
+        'f69': (['v26','v38','v29'], "#f50"), 
+        'f22': (['v17','v21','v20'], "#f50"), 
+        'f46': (['v7','v11','v31'], "#f50"), 
+        'f70': (['v26','v25','v38'], "#f50"), 
+        'f23': (['v17','v22','v21'], "#f50"), 
+        'f47': (['v7','v6','v11'], "#f50"), 
+        'f71': (['v25','v28','v38'], "#f50"), 
+        'f24': (['v17','v18','v22'], "#f50"), 
+        'f48': (['v31','v11','v12'], "#f50"), 
+        'f72': (['v38','v28','v29'], "#f50"),
+    }
+
+    return vertices, faces 
 
 if __name__ == "__main__":
     root = tk.Tk()  
-    root.title('abacaxi')
-    d = Designer(root, global_vertices, global_faces)
+    root.title('Trabalho 1')
+    vertices, faces = parse_csv(sys.argv[1])
+    d = Designer(root, vertices, faces)
     d.draw()
-    root.mainloop() 
-    
-    
-    
+    root.mainloop()
