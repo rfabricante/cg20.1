@@ -11,5 +11,5 @@ pip3 install Tkinter
 
 Em seguida
 ```
-CSV_PATH="CAMINHO_PARA_CSV" make run
+ARQ_VERT='CAMINHO_ARQUIVO_VERTICES' ARQ_FACES='CAMINHO_ARQ_FACES' make run
 ```
