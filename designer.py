@@ -1,4 +1,5 @@
 import tkinter as tk
+import numpy
 
 
 class Designer:
@@ -14,16 +15,40 @@ class Designer:
     def draw_form(self, vertices, color):
         coords = []
         for i in range(0, len(vertices)):
-            multiplier = 15
-            x = self.canvasWidth + self.vertices[vertices[i]][0]*multiplier
-            y = self.canvasHeight - self.vertices[vertices[i]][1]*multiplier
+            x = self.canvasWidth + self.vertices[vertices[i]][0]
+            y = self.canvasHeight - self.vertices[vertices[i]][1]
             coords.append([x, y])
         
         self.canvas.create_polygon(coords, fill=color)
         self.canvas.pack(fill=tk.BOTH)
 
-    def draw(self): 
-        for f, v in self.faces.items():
-            print(f"drawing face {f} with vertices {v}")
+    def draw(self):
+        self.scale(10)
+        self.vertical_skew(1)
+        face_list = list(self.faces.items()) 
+        for f, v in face_list:
+            print(f"drawing face {f} with vertices {v[0]}")
             self.draw_form(v[0], v[1])
+
+    def scale(self, amount=5):
+        matrix = [[amount,      0,      0],
+                  [     0, amount,      0],
+                  [     0,      0,      1]]
+
+        self._transform(matrix)
+
+    def vertical_skew(self, amount=5): 
+        matrix = [[     1,      0,      0],
+                  [amount,      1,      0],
+                  [     0,      0,      1]]
+
+        self._transform(matrix)
+    
+    def _transform(self, matrix): 
+        for k, v in self.vertices.items():
+            print(f"transforming vertice {k} with value {v}")
+            self.vertices[k] = numpy.matmul(matrix, v)
+            
+
+
     
