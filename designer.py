@@ -23,8 +23,6 @@ class Designer:
         self.canvas.pack(fill=tk.BOTH)
 
     def draw(self):
-        self.scale(10)
-        self.vertical_skew(1)
         face_list = list(self.faces.items()) 
         for f, v in face_list:
             print(f"drawing face {f} with vertices {v[0]}")

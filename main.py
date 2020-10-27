@@ -12,5 +12,7 @@ if __name__ == "__main__":
     vertices = csv_parser.vertices_to_dict()
     faces = csv_parser.faces_to_dict()
     d = designer.Designer(root, vertices, faces)
+    d.scale(10)
+    d.vertical_skew(1)
     d.draw()
     root.mainloop()
